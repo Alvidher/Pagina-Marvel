@@ -1,17 +1,17 @@
-//function for show heros depends on search also filter heros depends on key press
+
 const showCorrespondingHeros = () => {
   const xhr = new XMLHttpRequest();
   const name = document.getElementById("name").value;
 
-  // IN CASE OF ERROR
+
   xhr.onerror = function () {
     document.getElementById("characterSection").innerHTML = '<h2 id="characterMainTitle">An error has occured, check connection.</h2>';
   }
-  // INCASE OF NO ERROR load
+
   xhr.onload = function () {
     var responseJSON = JSON.parse(xhr.response);
     console.log(responseJSON);
-    // const characterAttributes = responseJSON.results;
+
     let html = "";
     html += "<div class='row'>";
     if (responseJSON.response == "success") {
@@ -27,7 +27,7 @@ const showCorrespondingHeros = () => {
               </div>
             </div>
           </div>    `
-        // console.log(responseJSON.results.length);
+
 
       });
     }
@@ -39,7 +39,7 @@ const showCorrespondingHeros = () => {
   xhr.send();
 }
 
-// make a favourites key for storing all favourites hero's id in local storage if not available
+
 if (localStorage.getItem("favourites") == null) {
   localStorage.setItem("favourites", JSON.stringify([]));
 } else {
@@ -47,13 +47,13 @@ if (localStorage.getItem("favourites") == null) {
 }
 
 
-// function for show heros full details in a new page
+
 function showDetails(idnumber) {
   localStorage.setItem("id", idnumber);
 }
 
 
-// function for adding id value in local storage favourites key if not available this id 
+
 function addFavourite(id) {
   if (!arr.includes(id) == true) {
     arr.push(id);
@@ -65,9 +65,9 @@ function addFavourite(id) {
 }
 
 
-// CHARACTER
+
 function character() {
-  // SO THAT THE URL CAN HAVE THE NAME INPUT AND ITS VALUE
+
   let urlQueryParameters = new URLSearchParams(window.location.search),
     queryParameterName = urlQueryParameters.get("name"),
     name = document.getElementById("name").value;
@@ -79,37 +79,37 @@ function character() {
     document
       .getElementById("connectionForm")
       .addEventListener("submit", connection);
-    // WORKS ON BOTH CLICK AS WELL AS ENTER EVENT
+
   } else {
     document.getElementById("characterSection").innerHTML =
       '<h2 id="characterMainTitle">TYPE NAME & PRESS "ENTER" TO GET THE RESULT....</h2>';
   }
 }
-// CONNECTION
+
 function connection() {
   const xhr = new XMLHttpRequest();
   const name = document.getElementById("name").value;
   const params = "name=" + name;
 
 
-  // ON LOAD-START
+
   xhr.onloadstart = function () {
     document.getElementById("characterSpinnerSection").innerHTML =
       '<strong id="spinnerText" class="text-primary">Loading character...</strong>' +
       '<div class="text-primary spinner-border ml-auto" role="status" ' +
       'aria-hidden="true" id="spinner"></div>';
   }
-  // IN CASE OF ERROR
+
   xhr.onerror = function () {
     document.getElementById("characterSection").innerHTML = '<h2 id="characterMainTitle">An error has occured, check connection.</h2>';
   }
 
-  // INCASE OF NO ERROR load
+
   xhr.onload = function () {
     var responseJSON = JSON.parse(xhr.response);
-    // console.log(responseJSON.data.results[0].comics);
+
     console.log(responseJSON.data.count)
-    // IF THE COUNT IS 0 MEANS NO DATA AVAILABLE
+
     if (responseJSON.data.count === 0) {
       document.getElementById("characterSection").innerHTML =
         '<h2 id="characterMainTitle"><span style="font-weight:bold;">No results for... ' +
@@ -119,7 +119,7 @@ function connection() {
       document.getElementById("comicsSpinnerSection").innerHTML = "";
 
     }
-    // IF SOMETHING WRONG WRITTEN IN THE INPUT
+
     else if (responseJSON == undefined || responseJSON.length == 0) {
       document.getElementById("characterSection").innerHTML =
         '<h2 id="characterMainTitle">' +
@@ -129,11 +129,11 @@ function connection() {
       document.getElementById("comicsSpinnerSection").innerHTML = "";
 
     }
-    // IF EVERYTHING IS FINE
+
     else {
       const characterAttributes = responseJSON.data.results[0],
         characterID = responseJSON.data.results[0].id;
-      // THE CHACTER INFO SECTION
+
       let output = "";
       output = output +
         '<h2 id="characterMainTitle">' +
@@ -183,7 +183,7 @@ function connection() {
     }
   }
 
-  // INCASE OF LOAD END
+
   xhr.onloadend = function () {
     document.getElementById("characterSpinnerSection").innerHTML = '<strong id="spinnerText" class="text-success">done</strong>';
   }
@@ -193,19 +193,19 @@ function connection() {
   xhr.send();
 }
 
-//COMICS SECTION
+
 function comics(characterID) {
   const xhr = new XMLHttpRequest();
   var id = characterID;
 
-  //LOAD START OF COMICS SECTION 
+
   xhr.onloadstart = function () {
     document.getElementById("comicsSpinnerSection").innerHTML =
       '<strong id="spinnerText" class="text-danger">Loading comics below...</strong>' +
       '<div class="spinner-border text-danger ml-auto" role="status" ' +
       'aria-hidden="true" id="spinner"></div>';
   }
-  //IN CASE OF ERROR
+
   xhr.onerror = function () {
     document.getElementById("characterSection").innerHTML =
       '<h2 id="characterMainTitle">An error has occured, check connection.</h2>';
@@ -213,12 +213,12 @@ function comics(characterID) {
       '<h2 id="characterMainTitle">An error has occured, check connection.</h2>';
   }
 
-  // ON LOAD SECTION
+
   xhr.onload = function () {
     var responseJSONcomic = JSON.parse(xhr.response);
-    // console.log(responseJSONcomic.data.results);
 
-    // IF THE COUNT IS 0 MEANS NO DATA AVAILABLE
+
+
     if (responseJSONcomic.data.count === 0) {
       document.getElementById("characterSection").innerHTML =
         '<h2 id="characterMainTitle"><span style="font-weight:bold;">No results for... ' +
@@ -228,7 +228,7 @@ function comics(characterID) {
       document.getElementById("comicsSpinnerSection").innerHTML = "";
 
     }
-    // IF SOMETHING WRONG WRITTEN IN THE INPUT
+
     else if (responseJSONcomic == undefined || responseJSONcomic.length == 0) {
       document.getElementById("characterSection").innerHTML =
         '<h2 id="characterMainTitle">' +
@@ -238,9 +238,9 @@ function comics(characterID) {
       document.getElementById("comicsSpinnerSection").innerHTML = "";
 
     }
-    // IF EVERYTHING IS FINE
+
     else {
-      // comics available
+
       const results = responseJSONcomic;
       let comics = responseJSONcomic.data.results;
       let comicSection = document.getElementById("comicSection");
@@ -314,12 +314,12 @@ function comics(characterID) {
     }
   }
 
-  // IF LOADING.. IS DONE
+
   xhr.onloadend = function () {
     document.getElementById("comicsSpinnerSection").innerHTML =
       '<strong id="spinnerText" class="text-success"></strong>';
   }
-  // ON ERROR
+
   xhr.onerror = function () {
     document.getElementById("characterSection").innerHTML =
       '<h2 id="characterMainTitle">An error has occured, check connection.</h2>';
